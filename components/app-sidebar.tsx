@@ -1,0 +1,156 @@
+"use client"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ProgressCircle } from "@/components/progress-circle"
+import {
+  MagnifyingGlass,
+  Tray,
+  CheckSquare,
+  Folder,
+  Users,
+  ChartBar,
+  Gear,
+  Layout,
+  Question,
+  CaretRight,
+  CaretUpDown,
+} from "@phosphor-icons/react/dist/ssr"
+
+const navItems = [
+  { icon: Tray, label: "Inbox", badge: 24 },
+  { icon: CheckSquare, label: "My task" },
+  { icon: Folder, label: "Projects", active: true },
+  { icon: Users, label: "Clients" },
+  { icon: ChartBar, label: "Performance" },
+]
+
+const activeProjects = [
+  { name: "AI Learning Platform", color: "#EF4444", progress: 25 },
+  { name: "Fintech Mobile App", color: "#F97316", progress: 80 },
+  { name: "E-commerce Admin", color: "#22C55E", progress: 65 },
+  { name: "Healthcare Booking App", color: "#94A3B8", progress: 10 },
+]
+
+const footerItems = [
+  { icon: Gear, label: "Settings" },
+  { icon: Layout, label: "Templates" },
+  { icon: Question, label: "Help" },
+]
+
+export function AppSidebar() {
+  return (
+    <Sidebar className="border-border/40 border-r-0 shadow-none border-none">
+      <SidebarHeader className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <span className="text-sm font-semibold">Z</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold">Workspace</span>
+              <span className="text-xs text-muted-foreground">Pro plan</span>
+            </div>
+          </div>
+          <button className="rounded-md p-1 hover:bg-accent">
+            <CaretUpDown className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent className="px-0 gap-0">
+        <SidebarGroup>
+          <div className="relative px-0 py-0">
+            <MagnifyingGlass className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search"
+              className="h-9 rounded-lg bg-muted/50 pl-8 text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-primary/20 border-border border shadow-none"
+            />
+            <kbd className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+              <span className="text-xs">⌘</span>K
+            </kbd>
+          </div>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton isActive={item.active} className="h-9 rounded-lg px-3 font-normal text-muted-foreground">
+                    <item.icon className="h-[18px] w-[18px]" weight={item.active ? "fill" : "regular"} />
+                    <span>{item.label}</span>
+                  </SidebarMenuButton>
+                  {item.badge && (
+                    <SidebarMenuBadge className="bg-muted text-muted-foreground rounded-full px-2">
+                      {item.badge}
+                    </SidebarMenuBadge>
+                  )}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="px-3 text-xs font-medium text-muted-foreground">
+            Active Projects
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {activeProjects.map((project) => (
+                <SidebarMenuItem key={project.name}>
+                  <SidebarMenuButton className="h-9 rounded-lg px-3 group">
+                    <ProgressCircle progress={project.progress} color={project.color} size={18} />
+                    <span className="flex-1 truncate text-sm">{project.name}</span>
+                    <button className="opacity-0 group-hover:opacity-100 rounded p-0.5 hover:bg-accent">
+                      <span className="text-muted-foreground text-lg">···</span>
+                    </button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="border-t border-border/40 p-2">
+        <SidebarMenu>
+          {footerItems.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <SidebarMenuButton className="h-9 rounded-lg px-3 text-muted-foreground">
+                <item.icon className="h-[18px] w-[18px]" />
+                <span>{item.label}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+
+        <div className="mt-2 flex items-center gap-3 rounded-lg p-2 hover:bg-accent cursor-pointer">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="/placeholder.svg?height=32&width=32" />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-1 flex-col">
+            <span className="text-sm font-medium">Jason D</span>
+            <span className="text-xs text-muted-foreground">jason.duong@mail.com</span>
+          </div>
+          <CaretRight className="h-4 w-4 text-muted-foreground" />
+        </div>
+      </SidebarFooter>
+    </Sidebar>
+  )
+}
