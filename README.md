@@ -102,24 +102,24 @@ This separation keeps:
 
 ### Install dependencies
 
-```bash
+\`\`\`bash
 pnpm install
-```
+\`\`\`
 
 ### Run the development server
 
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 The app will be available at `http://localhost:3000`.
 
 ### Build for production
 
-```bash
+\`\`\`bash
 pnpm build
 pnpm start
-```
+\`\`\`
 
 ## Reuse & Customization
 
@@ -141,4 +141,3 @@ This project was built as an **open-source, living portfolio** to demonstrate ho
 - Building reusable UI primitives that are still easy to adapt.
 
 If you are a founder, PM, or engineer and want to talk about collaborating, feel free to reach out.
-
