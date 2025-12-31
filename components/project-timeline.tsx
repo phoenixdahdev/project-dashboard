@@ -25,6 +25,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { DraggableBar } from "@/components/project-timeline-draggable-bar"
+import { PriorityGlyphIcon } from "@/components/priority-badge"
 
 // Fixed "today" so the demo stays visually consistent over time.
 // This controls the initial viewport and the vertical "today" line.
@@ -554,6 +555,8 @@ export function ProjectTimeline() {
                               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                 <span>{task.assignee}</span>
                                 <span>•</span>
+                                <PriorityGlyphIcon level={project.priority} size="sm" />
+                                <span>•</span>
                                 <span>{task.status}</span>
                               </div>
                             </div>
@@ -666,6 +669,8 @@ export function ProjectTimeline() {
                         <div className="text-md">{task.name}</div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                           <span>{task.assignee}</span>
+                          <span>•</span>
+                          <PriorityGlyphIcon level={project.priority} size="sm" />
                           <span>•</span>
                           <span>{task.status}</span>
                         </div>
