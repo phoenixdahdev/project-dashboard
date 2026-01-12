@@ -21,20 +21,23 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 import { cn } from "@/lib/utils"
 
-interface ViewOptionsPopoverProps {
-  options: {
-    viewType: "list" | "board" | "timeline"
-    tasks: "indented" | "collapsed" | "flat"
-    ordering: "manual" | "alphabetical" | "date"
-    showAbsentParent: boolean
-    showClosedProjects: boolean
-    groupBy: "none" | "status" | "assignee" | "tags"
-    properties: string[]
-  }
-  onChange: (options: typeof options) => void
+type Options = {
+  viewType: "list" | "board" | "timeline"
+  tasks: "indented" | "collapsed" | "flat"
+  ordering: "manual" | "alphabetical" | "date"
+  showAbsentParent: boolean
+  showClosedProjects: boolean
+  groupBy: "none" | "status" | "assignee" | "tags"
+  properties: string[]
 }
 
-export function ViewOptionsPopover({ options, onChange }: ViewOptionsPopoverProps) {
+interface ViewOptionsPopoverProps {
+  options: Options
+  onChange: (options: Options) => void
+  allowedViewTypes?: string[]
+}
+
+export function ViewOptionsPopover({ options, onChange, allowedViewTypes }: ViewOptionsPopoverProps) {
   const [tasksOpen, setTasksOpen] = useState(false)
   const [orderingOpen, setOrderingOpen] = useState(false)
   const [groupByOpen, setGroupByOpen] = useState(false)
@@ -43,26 +46,26 @@ export function ViewOptionsPopover({ options, onChange }: ViewOptionsPopoverProp
     { id: "list", label: "List", icon: ListBullets },
     { id: "board", label: "Board", icon: Kanban },
     { id: "timeline", label: "Timeline", icon: ChartBar },
-  ] as const
+  ].filter((type) => !allowedViewTypes || allowedViewTypes.includes(type.id))
 
   const taskOptions = [
     { id: "indented", label: "Indented", icon: TextIndent },
     { id: "collapsed", label: "Collapsed", icon: CaretUpDown },
     { id: "flat", label: "Flat", icon: ListDashes },
-  ] as const
+  ]
 
   const orderingOptions = [
     { id: "manual", label: "Manual" },
     { id: "alphabetical", label: "Alphabetical" },
     { id: "date", label: "Date" },
-  ] as const
+  ]
 
   const groupByOptions = [
     { id: "none", label: "None", icon: Globe },
     { id: "status", label: "Status", icon: Spinner, count: "4 status" },
     { id: "assignee", label: "Assignee", icon: User, count: "1 active" },
     { id: "tags", label: "Tags", icon: Tag, count: "4 tags" },
-  ] as const
+  ]
 
   const propertyOptions = [
     { id: "title", label: "Title", icon: TextT },
@@ -86,7 +89,7 @@ export function ViewOptionsPopover({ options, onChange }: ViewOptionsPopoverProp
             {viewTypes.map((type) => (
               <button
                 key={type.id}
-                onClick={() => onChange({ ...options, viewType: type.id })}
+                onClick={() => onChange({ ...options, viewType: type.id as Options['viewType'] })}
                 className={cn(
                   "flex flex-1 flex-col items-center gap-1 rounded-lg py-2.5 text-xs font-medium transition-colors shadow-none",
                   options.viewType === type.id
@@ -121,7 +124,7 @@ export function ViewOptionsPopover({ options, onChange }: ViewOptionsPopoverProp
                     <button
                       key={option.id}
                       onClick={() => {
-                        onChange({ ...options, tasks: option.id })
+                        onChange({ ...options, tasks: option.id as Options['tasks'] })
                         setTasksOpen(false)
                       }}
                       className={cn(
@@ -157,7 +160,7 @@ export function ViewOptionsPopover({ options, onChange }: ViewOptionsPopoverProp
                     <button
                       key={option.id}
                       onClick={() => {
-                        onChange({ ...options, ordering: option.id })
+                        onChange({ ...options, ordering: option.id as Options['ordering'] })
                         setOrderingOpen(false)
                       }}
                       className={cn(
@@ -209,7 +212,7 @@ export function ViewOptionsPopover({ options, onChange }: ViewOptionsPopoverProp
                     <button
                       key={option.id}
                       onClick={() => {
-                        onChange({ ...options, groupBy: option.id })
+                        onChange({ ...options, groupBy: option.id as Options['groupBy'] })
                         setGroupByOpen(false)
                       }}
                       className={cn(

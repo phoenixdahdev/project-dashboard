@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   Sidebar,
   SidebarContent,
@@ -46,6 +48,28 @@ const footerItemIcons: Record<SidebarFooterItemId, React.ComponentType<{ classNa
 }
 
 export function AppSidebar() {
+  const pathname = usePathname()
+
+  const getHrefForNavItem = (id: NavItemId): string => {
+    if (id === "my-tasks") return "/tasks"
+    if (id === "projects") return "/"
+    if (id === "inbox") return "/" // placeholder
+    return "#"
+  }
+
+  const isItemActive = (id: NavItemId): boolean => {
+    if (id === "projects") {
+      return pathname === "/" || pathname.startsWith("/projects")
+    }
+    if (id === "my-tasks") {
+      return pathname.startsWith("/tasks")
+    }
+    if (id === "inbox") {
+      return false
+    }
+    return false
+  }
+
   return (
     <Sidebar className="border-border/40 border-r-0 shadow-none border-none">
       <SidebarHeader className="p-4">
@@ -82,29 +106,33 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  {(() => {
-                    const Icon = navItemIcons[item.id]
-                    return null
-                  })()}
-                  <SidebarMenuButton
-                    isActive={item.isActive}
-                    className="h-9 rounded-lg px-3 font-normal text-muted-foreground"
-                  >
-                    {(() => {
-                      const Icon = navItemIcons[item.id]
-                      return Icon ? <Icon className="h-[18px] w-[18px]" /> : null
-                    })()}
-                    <span>{item.label}</span>
-                  </SidebarMenuButton>
-                  {item.badge && (
-                    <SidebarMenuBadge className="bg-muted text-muted-foreground rounded-full px-2">
-                      {item.badge}
-                    </SidebarMenuBadge>
-                  )}
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const href = getHrefForNavItem(item.id)
+                const active = isItemActive(item.id)
+
+                return (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
+                      className="h-9 rounded-lg px-3 font-normal text-muted-foreground"
+                    >
+                      <Link href={href}>
+                        {(() => {
+                          const Icon = navItemIcons[item.id]
+                          return Icon ? <Icon className="h-[18px] w-[18px]" /> : null
+                        })()}
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {item.badge && (
+                      <SidebarMenuBadge className="bg-muted text-muted-foreground rounded-full px-2">
+                        {item.badge}
+                      </SidebarMenuBadge>
+                    )}
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

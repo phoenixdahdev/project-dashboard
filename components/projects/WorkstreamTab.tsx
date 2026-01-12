@@ -25,11 +25,11 @@ import { CSS } from "@dnd-kit/utilities"
 import type { WorkstreamGroup, WorkstreamTask } from "@/lib/data/project-details"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { ProgressCircle } from "@/components/progress-circle"
 import { cn } from "@/lib/utils"
+import { TaskRowBase } from "@/components/tasks/TaskRowBase"
 
 type WorkstreamTabProps = {
   workstreams: WorkstreamGroup[] | undefined
@@ -365,59 +365,47 @@ function TaskRow({ task, onToggle, activeTaskId, overTaskId }: TaskRowProps) {
   return (
     <div ref={setNodeRef} style={style} className="space-y-1">
       {showDropLine && <div className="h-px w-full rounded-full bg-primary" />}
-      <div
-        className={cn(
-          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-muted/60",
-          isDragging && "opacity-60",
-        )}
-      >
-        <Checkbox
-          checked={isDone}
-          onCheckedChange={onToggle}
-          aria-label={task.name}
-          className="rounded-full border-border bg-background data-[state=checked]:border-teal-600 data-[state=checked]:bg-teal-600 hover:cursor-pointer"
-        />
-        <span
-          className={cn(
-            "flex-1 truncate text-left",
-            isDone && "line-through text-muted-foreground",
-          )}
-        >
-          {task.name}
-        </span>
-        <div className="flex items-center gap-3 text-xs">
-          {task.dueLabel && (
-            <span
-              className={cn(
-                "text-muted-foreground",
-                task.dueTone === "danger" && "text-red-500",
-                task.dueTone === "warning" && "text-amber-500",
-              )}
+      <TaskRowBase
+        checked={isDone}
+        title={task.name}
+        onCheckedChange={onToggle}
+        titleAriaLabel={task.name}
+        meta={
+          <>
+            {task.dueLabel && (
+              <span
+                className={cn(
+                  "text-muted-foreground",
+                  task.dueTone === "danger" && "text-red-500",
+                  task.dueTone === "warning" && "text-amber-500",
+                )}
+              >
+                {task.dueLabel}
+              </span>
+            )}
+            {task.assignee && (
+              <Avatar className="size-6">
+                {task.assignee.avatarUrl && (
+                  <AvatarImage src={task.assignee.avatarUrl} alt={task.assignee.name} />
+                )}
+                <AvatarFallback>{task.assignee.name.charAt(0).toUpperCase()}</AvatarFallback>
+              </Avatar>
+            )}
+            <Button
+              type="button"
+              size="icon-sm"
+              variant="ghost"
+              className="size-7 rounded-md text-muted-foreground cursor-grab active:cursor-grabbing"
+              aria-label="Reorder task"
+              {...attributes}
+              {...listeners}
             >
-              {task.dueLabel}
-            </span>
-          )}
-          {task.assignee && (
-            <Avatar className="size-6">
-              {task.assignee.avatarUrl && (
-                <AvatarImage src={task.assignee.avatarUrl} alt={task.assignee.name} />
-              )}
-              <AvatarFallback>{task.assignee.name.charAt(0).toUpperCase()}</AvatarFallback>
-            </Avatar>
-          )}
-          <Button
-            type="button"
-            size="icon-sm"
-            variant="ghost"
-            className="size-7 rounded-md text-muted-foreground cursor-grab active:cursor-grabbing"
-            aria-label="Reorder task"
-            {...attributes}
-            {...listeners}
-          >
-            <DotsSixVertical className="h-4 w-4" weight="regular" />
-          </Button>
-        </div>
-      </div>
+              <DotsSixVertical className="h-4 w-4" weight="regular" />
+            </Button>
+          </>
+        }
+        className={cn(isDragging && "opacity-60")}
+      />
     </div>
   )
 }

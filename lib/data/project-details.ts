@@ -52,6 +52,13 @@ export type WorkstreamGroup = {
   tasks: WorkstreamTask[]
 }
 
+export type ProjectTask = WorkstreamTask & {
+  projectId: string
+  projectName: string
+  workstreamId: string
+  workstreamName: string
+}
+
 export type TimeSummary = {
   estimateLabel: string
   dueDate: Date
@@ -90,6 +97,20 @@ export type ProjectDetails = {
   backlog: BacklogSummary
   quickLinks: QuickLink[]
   source?: ProjectListItem
+}
+
+export function getProjectTasks(details: ProjectDetails): ProjectTask[] {
+  const workstreams = details.workstreams ?? []
+
+  return workstreams.flatMap((group) =>
+    group.tasks.map((task) => ({
+      ...task,
+      projectId: details.id,
+      projectName: details.name,
+      workstreamId: group.id,
+      workstreamName: group.name,
+    })),
+  )
 }
 
 function userFromName(name: string, role?: string): User {
