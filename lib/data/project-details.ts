@@ -97,6 +97,14 @@ export type QuickLink = {
   url: string
 }
 
+export type ProjectFile = QuickLink & {
+  addedBy: User
+  addedDate: Date
+  description?: string
+  isLinkAsset?: boolean
+  attachments?: QuickLink[]
+}
+
 export type NoteType = "general" | "meeting" | "audio"
 export type NoteStatus = "completed" | "processing"
 
@@ -140,6 +148,7 @@ export type ProjectDetails = {
   time: TimeSummary
   backlog: BacklogSummary
   quickLinks: QuickLink[]
+  files: ProjectFile[]
   notes: ProjectNote[]
   source?: ProjectListItem
 }
@@ -288,6 +297,7 @@ function baseDetailsFromListItem(p: ProjectListItem): ProjectDetails {
       supportUsers: [userFromName("Support", "Support")],
     },
     quickLinks: [],
+    files: [],
     notes: [
       {
         id: `${p.id}-note-1`,
@@ -444,14 +454,71 @@ export function getProjectDetailsById(id: string): ProjectDetails {
       p2: ["Visual polish & motion guidelines"],
     }
 
-    details.quickLinks = [
-      { id: "ql-1", name: "Proposal.pdf", type: "pdf", sizeMB: 13.0, url: "#" },
-      { id: "ql-2", name: "Wireframe Layout.zip", type: "zip", sizeMB: 13.0, url: "#" },
-      { id: "ql-3", name: "UI Kit.fig", type: "fig", sizeMB: 13.0, url: "#" },
-    ]
-
     const primaryAssignee = details.backlog.picUsers[0]
     const today = new Date()
+
+    const filesBaseDate = new Date(2024, 8, 18)
+
+    const files: ProjectFile[] = [
+      {
+        id: "file-1",
+        name: "Proposal.pdf",
+        type: "pdf",
+        sizeMB: 13.0,
+        url: "#",
+        addedBy: primaryAssignee,
+        addedDate: filesBaseDate,
+      },
+      {
+        id: "file-2",
+        name: "Wireframe Layout.zip",
+        type: "zip",
+        sizeMB: 13.0,
+        url: "#",
+        addedBy: primaryAssignee,
+        addedDate: filesBaseDate,
+      },
+      {
+        id: "file-3",
+        name: "Design system.fig",
+        type: "fig",
+        sizeMB: 13.0,
+        url: "#",
+        addedBy: primaryAssignee,
+        addedDate: filesBaseDate,
+      },
+      {
+        id: "file-4",
+        name: "UI Kit.fig",
+        type: "fig",
+        sizeMB: 13.0,
+        url: "#",
+        addedBy: primaryAssignee,
+        addedDate: filesBaseDate,
+      },
+      {
+        id: "file-5",
+        name: "Asset.pdf",
+        type: "pdf",
+        sizeMB: 13.0,
+        url: "#",
+        addedBy: primaryAssignee,
+        addedDate: filesBaseDate,
+      },
+      {
+        id: "file-6",
+        name: "Asset.pdf",
+        type: "pdf",
+        sizeMB: 13.0,
+        url: "#",
+        addedBy: primaryAssignee,
+        addedDate: filesBaseDate,
+      },
+    ]
+
+    details.files = files
+
+    details.quickLinks = files.slice(0, 3)
 
     details.workstreams = [
       {

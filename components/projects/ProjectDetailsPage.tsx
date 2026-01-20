@@ -17,6 +17,7 @@ import { RightMetaPanel } from "@/components/projects/RightMetaPanel"
 import { WorkstreamTab } from "@/components/projects/WorkstreamTab"
 import { ProjectTasksTab } from "@/components/projects/ProjectTasksTab"
 import { NotesTab } from "@/components/projects/NotesTab"
+import { AssetsFilesTab } from "@/components/projects/AssetsFilesTab"
 import { ProjectWizard } from "@/components/project-wizard/ProjectWizard"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
@@ -164,9 +165,7 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
                   </TabsContent>
 
                   <TabsContent value="assets">
-                    <div className="rounded-lg border border-dashed border-border/70 bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
-                      Assets &amp; Files section is upcoming.
-                    </div>
+                    <AssetsFilesTab files={project.files} />
                   </TabsContent>
                 </Tabs>
               </div>

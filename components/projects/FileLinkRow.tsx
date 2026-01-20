@@ -10,7 +10,7 @@ type FileLinkRowProps = {
   className?: string
 }
 
-function fileIcon(type: QuickLink["type"]) {
+export function getFileIcon(type: QuickLink["type"]) {
   switch (type) {
     case "pdf":
       return { src: "/pdf.png", alt: "PDF" }
@@ -24,12 +24,12 @@ function fileIcon(type: QuickLink["type"]) {
 }
 
 export function FileLinkRow({ file, className }: FileLinkRowProps) {
-  const icon = fileIcon(file.type)
+  const icon = getFileIcon(file.type)
 
   return (
     <div className={cn("flex items-center justify-between", className)}>
       <div className="flex items-center gap-3 min-w-0">
-        <div className="shrink-0 rounded-lg bg-muted/40 flex items-center justify-center">
+        <div className="shrink-0 rounded-lg flex items-center justify-center">
           <Image
             src={icon.src}
             alt={icon.alt}
